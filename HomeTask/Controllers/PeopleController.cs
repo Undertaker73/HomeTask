@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeTask.Data.Models;
+using HomeTask.Data.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -44,10 +45,10 @@ namespace HomeTask.Controllers
         /// <param name="newReader"></param>
         /// <returns></returns>
         [HttpPost]
-        public List<People> PostAddReader([FromBody] People newReader)
+        public List<IPeople> PostAddReader([FromBody] People newReader)
         {
             _readers.Add(newReader);
-            return _readers;
+            return _readers.Cast<IPeople>().ToList();
         }
 
         /// <summary>

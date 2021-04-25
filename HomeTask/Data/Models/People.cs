@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using HomeTask.Data.Interfaces;
 
 namespace HomeTask.Data.Models
-{
-    public class People
+{   /// <summary>
+    /// 2. Класс описывающий читателя
+    /// </summary>
+    public class People : IPeople
     {
         //public int id { get; set; }
         [Required]

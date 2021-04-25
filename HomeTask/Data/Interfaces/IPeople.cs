@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using HomeTask.Data.Interfaces;
 
-namespace HomeTask.Data.Models
+namespace HomeTask.Data.Interfaces
 {
     /// <summary>
-    /// 2 Класс описывающий книгу
+    /// 2.2.2 Интерфейс для ФИО People
     /// </summary>
-    public class Book : IBook
+    public interface IPeople
     {
         //public int id { get; set; }
         [Required]
         public string name { get; set; }
         [Required]
-        public string author { get; set; }
+        public string surname { get; set; }
         [Required]
-        public string genre { get; set; }
-
+        public string patronymic { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeTask.Data.Models;
+using HomeTask.Data.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,7 +18,7 @@ namespace HomeTask.Controllers
                                                               new Book() { name = "Властелин колец", genre = "фэнтези", author = "Толкин"},
                                                               new Book() { name = "Дюна", genre = "фантастика", author = "Герберт"} };
         /// <summary>
-        /// 2 Получить все книги
+        /// 2. Получить все книги
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -38,15 +39,15 @@ namespace HomeTask.Controllers
         }
 
         /// <summary>
-        /// Добавить книгу
+        /// 2. Добавить книгу
         /// </summary>
         /// <param name="book"></param>
         /// <returns></returns>
         [HttpPost]
-        public List<Book> PostAddBook([FromBody] Book book)
+        public List<IBook> PostAddBook([FromBody] Book book)
         {
             _books.Add(book); 
-            return _books;
+            return _books.Cast<IBook>().ToList();
         }
 
         /// <summary>
