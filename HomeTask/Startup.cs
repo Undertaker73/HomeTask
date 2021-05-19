@@ -8,9 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using HomeTask.Controllers;
+using Library;
 
 namespace HomeTask
 {
@@ -26,6 +27,8 @@ namespace HomeTask
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<LIBRARYContext>(options => options.UseSqlServer(connectionString));
             services.AddControllers();
         }
 
