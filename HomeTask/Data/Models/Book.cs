@@ -1,24 +1,18 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using HomeTask.Data.Interfaces;
 
-namespace HomeTask.Data.Models
+#nullable disable
+
+namespace Library
 {
-    /// <summary>
-    /// 2 Класс описывающий книгу
-    /// </summary>
-    public class Book : IBook
+    public partial class Book
     {
-        //public int id { get; set; }
+        public int BookId { get; set; }
         [Required]
-        public string name { get; set; }
-        [Required]
-        public string author { get; set; }
-        [Required]
-        public string genre { get; set; }
+        public string Name { get; set; }
+        public int AuthorId { get; set; }
 
+        public virtual Author Author { get; set; }
+        public virtual ICollection<DimGenre> Genres { get; set; }
     }
 }

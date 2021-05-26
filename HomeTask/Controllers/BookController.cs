@@ -2,68 +2,85 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using HomeTask.Data.Models;
-using HomeTask.Data.Interfaces;
+using Library;
+using Library.Data.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HomeTask.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BookController : ControllerBase
     {
-        private static List<Book> _books = new List<Book>() { new Book() { name = "Зов ктулху", genre = "ужасы", author = "Лавкрафт"},
-                                                              new Book() { name = "Властелин колец", genre = "фэнтези", author = "Толкин"},
-                                                              new Book() { name = "Дюна", genre = "фантастика", author = "Герберт"} };
-        /// <summary>
-        /// 2. Получить все книги
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public List<Book> GetAll()
+        private BookRepository _book;
+
+        public BookController(LIBRARYContext context)
         {
-            return _books;
+            _book = new BookRepository(context);
         }
 
         /// <summary>
-        /// 2.Получить книгу по автору
+        /// Получить книги по жанру
         /// </summary>
-        /// <param name="author"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public IEnumerator<Book> GetBooksByGenre(int id)
+        {
+            return _book.GetBooksByGenre(id);
+        }
+
+        /// <summary>
+        /// Получить книги по автору
+        /// </summary>
         /// <returns></returns>
         [HttpGet("{author}")]
-        public List<Book> GetBookByAuthor(string author)
+        public IEnumerator<Book> GetBooksByAuthor(Author author)
         {
-            return _books.FindAll(b => (b.author == author));
+            return _book.GetBooksByAuthor(author);
         }
 
         /// <summary>
-        /// 2. Добавить книгу
+        /// Изменить жанры у книги
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public Book AddGenres([FromBody] Book book)
+        {
+            return _book.UpdateGenresBook(book);
+        }
+
+        /// <summary>
+        /// Добавить книгу
         /// </summary>
         /// <param name="book"></param>
         /// <returns></returns>
         [HttpPost]
-        public List<IBook> PostAddBook([FromBody] Book book)
+        public Book PostBook([FromBody] Book book)
         {
-            _books.Add(book); 
-            return _books.Cast<IBook>().ToList();
+            return _book.AddBook(book);
         }
 
         /// <summary>
-        /// 2. Удалить книгу по авторуи названию
+        /// Удалить книгу 
         /// </summary>
         /// <param name="book"></param>
         /// <returns></returns>
         [HttpDelete]
-        public IActionResult DeleteBook([FromBody]Book book)
+        public IActionResult DeleteBook(int id)
         {
-            if (_books.First(b => (b.name == book.name && b.author == book.author)) == null)
+            switch (_book.DeleteBook(id))
             {
-                return NotFound();
+                case "The book isn't found":
+                    return NotFound();
+                case "The book is issued by reader":
+                    return BadRequest();
+                case "The book was deleted":
+                    return Ok();
+                default:
+                    return BadRequest();
             }
-            _books.RemoveAll(b => (b.name == book.name && b.author == book.author));
-            return Ok();
         }
     }
 }
